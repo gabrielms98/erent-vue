@@ -19,7 +19,7 @@
     "rebuild": "electron-rebuild -f -w sqlite3"
   },
   "build": {
-    "productName": "bd-bomsono",
+    "productName": "erent-vue",
     "appId": "com.gms.erentvue",
     "directories": {
       "output": "build"
@@ -55,7 +55,9 @@
   "dependencies": {
     "axios": "^0.16.1",
     "electron-rebuild": "^1.8.2",
+    "mysql2": "^1.6.5",
     "node-pre-gyp": "^0.11.0",
+    "sequelize": "^5.8.12",
     "sqlite3": "^4.0.3",
     "vue": "^2.4.2",
     "vue-electron": "^1.0.6",

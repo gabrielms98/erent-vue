@@ -7,13 +7,20 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'sl',
-      component: require('@/components/sl').default
+      name: 'Home',
+      component: require('@/components/Home.vue').default,
+      props: true
     },
     {
-      path: '/inspire',
-      name: 'inspire',
-      component: require('@/components/InspireView').default
+      path: '/Pesquisar',
+      name: 'Pesquisar',
+      component: require('@/components/Pesquisar.vue').default,
+    },
+    {
+      path: '/Pesquisa:filtro',
+      name: 'PesquisaFiltro',
+      component: require('@/components/Pesquisar.vue').default,
+      props: true
     },
     {
       path: '*',

@@ -37,7 +37,7 @@
             <v-list-tile
               v-else
               :key="i"
-              @click=""
+              :to="item.to"
             >
               <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>
@@ -138,7 +138,7 @@
   export default {
     data: () => ({
       drawer: null,
-      color_primary: '#71469b',
+      color_primary: '#7b6ff9',
       session: false,
       filtros: [
         {text: 'Cidade'},
@@ -148,7 +148,7 @@
       selected: '',
       tipo_filtro: '',
       items: [
-        { icon: 'search', text: 'Pesquisar' },
+        { icon: 'search', text: 'Pesquisar', to: '/Pesquisar' },
         { icon: 'touch_app', text: 'Requisições' },
         { divider: true },
         { icon: 'archive', text: 'Meus Anúncios' },
@@ -172,11 +172,13 @@
     methods: {
       select: function(filtro){
         this.selected = filtro;
-        console.log(this.selected);
+        this.session = true;
+        this.$router.push('/Pesquisa' + this.selected);
       },
 
       login: function(){
         this.session = true;
+        this.$router.push('/');
       },
 
       logout: function(){
