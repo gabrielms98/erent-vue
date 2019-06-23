@@ -64,7 +64,7 @@
         </v-btn>
       </v-toolbar>
       <v-content>
-        <!-- CONTENT OF THE APPLICATION ITSELF -->
+        <router-view></router-view>
       </v-content>
     </v-app>
   </div>
@@ -73,9 +73,14 @@
       <div align="right" style="vertical-align: top; margin-right: 5px;">
         <v-btn flat icon>Cadastrar</v-btn>
         &nbsp&nbsp&nbsp&nbsp |&nbsp
-        <v-dialog max-width="300px" class="oi">
-          <v-btn flat icon slot="activator">Entrar</v-btn>
-          <v-card>
+        <v-menu  
+        v-model="menu"
+        :close-on-content-click="false"
+        :nudge-width="200"
+        offset-x
+        >
+        <v-btn flat icon slot="activator">Entrar</v-btn>
+        <v-card>
             <v-card-text>
               <v-form>
                 <v-text-field v-model="username" prepend-icon="person" name="login" label="CPF" type="text" @keyup.enter.native="Login"></v-text-field>
@@ -87,7 +92,7 @@
                 <v-btn :color="color_primary" @click="login">Entrar</v-btn>
               </v-card-actions>
           </v-card>
-        </v-dialog>
+    </v-menu>
       </div>
       <v-content>
         <v-container fluid fill-height grid-list-md text-xs-center>
@@ -181,7 +186,7 @@
   }
 </script>
 
-<style lang="stylus">
+<style>
   .back {
     background-image: url(./assets/showroom.jpg);
     background-size: cover;
