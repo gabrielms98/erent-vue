@@ -123,7 +123,6 @@ export default {
         value3: [300, 2000],
         cidades: require('./cidades.json').mg_city_list,
         selected_cidade: '',
-        path: ''
     }),
     props: {
         filtro: {

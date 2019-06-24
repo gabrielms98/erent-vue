@@ -57,7 +57,7 @@
       </v-navigation-drawer>
       <v-toolbar :color="color_primary" app absolute clipped-left>
         <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
-        <span class="title ml-3 mr-5">eRent</span>
+        <span class="title ml-3 mr-5">&nbsp&nbsp&nbsp<v-btn flat icon router to="/"><img src="@/assets/erent-logo-btn.png" width="100px"></v-btn></span>
         <v-spacer></v-spacer>
         <v-btn icon flat>
           <v-icon :color="color_notification">{{notification_icon}}</v-icon>
@@ -98,6 +98,7 @@
         <v-container fluid fill-height grid-list-md text-xs-center>
           <v-layout align-center justify-center>
             <v-flex xs30 sm24 md8>
+              <img src="@/assets/erent-logo.png" alt="">
               <v-card class="elevation-12">
                 <v-card-text>
                   <v-layout row wrap>
