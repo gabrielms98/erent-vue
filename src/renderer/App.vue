@@ -73,7 +73,7 @@
       <div align="right" style="vertical-align: top; margin-right: 5px;">
         <v-btn flat icon>Cadastrar</v-btn>
         &nbsp&nbsp&nbsp&nbsp |&nbsp
-        <v-menu  
+        <v-menu
         v-model="menu_login"
         :close-on-content-click="false"
         :nudge-width="200"
@@ -157,19 +157,19 @@
         { icon: 'search', text: 'Pesquisar', to: '/Pesquisar' },
         { icon: 'touch_app', text: 'Requisições' },
         { divider: true },
-        { icon: 'archive', text: 'Meus Anúncios' },
-        { icon: 'local_offer', text: 'Meus Alugados' },
+        { icon: 'local_offer', text: 'Meus Anúncios' },
+        { icon: 'local_atm', text: 'Meus Alugados' },
         { icon: 'local_grocery_store', text: 'Meus Alugueis'},
         { divider: true },
         { icon: 'person', text: 'Perfil' },
         { icon: 'notifications', text: 'Notificações'},
       ],
-      new_notification: false,  
+      new_notification: false,
       notification_icon: 'notifications',
       color_notification: 'black'
     }),
     props: {
-      source: String 
+      source: String
     },
     mounted: function(){
       this.notification_icon = this.new_notification ? 'notifications_active' : 'notifications';

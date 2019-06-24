@@ -7,11 +7,19 @@ const Op = Sequelize.Op;
 //global vars/objects
 var models;
 
-const sequelize = new Sequelize('erent-bd', 'user-erent', 'engenharia1', {
+/*const sequelize = new Sequelize('erent-bd', 'roo', 'engenharia1', {
   host: '127.0.0.1',
   dialect: 'mysql',
   operatorsAliases: false,
   port: 5432,
+  storage: 'erentdb.db'
+});*/
+
+const sequelize = new Sequelize('erent-bd', 'root', '1234', {
+  host: '127.0.0.1',
+  dialect: 'mysql',
+  operatorsAliases: false,
+  port: 3306,
   storage: 'erentdb.db'
 });
 
@@ -34,7 +42,7 @@ const backend = {
     Vue.prototype.$backend = {
 
         synced: false,
-        
+
         addUsuario(usuario, callback=null){
           models.Usuario.create({
             login: usuario.login,
