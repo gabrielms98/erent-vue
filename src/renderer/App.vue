@@ -108,6 +108,7 @@
                       hide-details
                       label="Search"
                       prepend-inner-icon="search"
+                      v-model="pesquisa"
                     ></v-text-field>
                     </v-flex>
                     <v-flex xs14 sm2>
@@ -138,6 +139,7 @@
   export default {
     data: () => ({
       drawer: null,
+      pesquisa: '',
       color_primary: '#7b6ff9',
       session: false,
       filtros: [
