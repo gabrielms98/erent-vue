@@ -15,6 +15,7 @@ module.exports = function(sequelize, Sequelize){
         acessibilidade: Sequelize.STRING,
         comodos: Sequelize.INTEGER,
         regras: Sequelize.STRING,
+        estrelas: Sequelize.INTEGER,
         idUsuario: Sequelize.INTEGER
     },
     {

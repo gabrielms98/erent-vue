@@ -60,7 +60,7 @@
                                         <v-layout>
                                             <p>Cidade</p>
                                             <v-autocomplete
-                                                v-model="model"
+                                                v-model="selected_cidade"
                                                 :items="cidades"
                                                 persistent-hint
                                                 prepend-icon="mdi-city"
@@ -116,24 +116,36 @@
 </template>
 
 <script>
+import { remote } from 'electron'
 export default {
     data: () => ({
-        apartamentos: [
-            { title: 'AP 4 QUARTOS', preco: 'R$400,00', cidade: 'Belo Horizonte', stars: 3},
-            { title: 'AP 2 QUARTOS', preco: 'R$300,00', cidade: 'Viçosa', stars: 4},
-            { title: 'Kitnet', preco: 'R$529,90', cidade: 'Araxa', stars: 5},
-            { title: 'Kitnet', preco: 'R$529,90', cidade: 'Araxa', stars: 5}
-        ],
+        apartamentos: [],
         value3: [300, 2000],
-        cidades: require('./cidades.json').mg_city_list
+        cidades: require('./cidades.json').mg_city_list,
+        selected_cidade: ''
     }),
     props: {
         filtro: {
             default: ''
         }
     },
-    mounted() {
-        console.log(this.filtro);
+    mounted: function() {
+        if(this.filtro == ''){
+            this.$backend.getAllImoveis(all_imoveis => {
+                if(all_imoveis.length == 0){
+                    remote.dialog.showMessageBox({type: 'warning', title: 'Falha ao recuparar todos apartamentos', message: 'Verifique a conexão com o banco de dados ou certifique que ele está preenchido.'});
+                    return;
+                }
+                all_imoveis.forEach(im => {
+                    this.apartamentos.push({
+                        preco:  'R$' + im.valor,
+                        cidade: im.cidade,
+                        title: im.titulo,
+                        stars: im.estrelas,
+                    });
+                });
+            });
+        }
     },
 }
 </script>

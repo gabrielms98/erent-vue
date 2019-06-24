@@ -74,7 +74,7 @@
         <v-btn flat icon>Cadastrar</v-btn>
         &nbsp&nbsp&nbsp&nbsp |&nbsp
         <v-menu  
-        v-model="menu"
+        v-model="menu_login"
         :close-on-content-click="false"
         :nudge-width="200"
         offset-x
@@ -142,6 +142,9 @@
       pesquisa: '',
       color_primary: '#7b6ff9',
       session: false,
+      username: '',
+      pwd: '',
+      menu_login: '',
       filtros: [
         {text: 'Cidade'},
         {text: 'Quarto'},

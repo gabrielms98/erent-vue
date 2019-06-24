@@ -36,18 +36,44 @@ const backend = {
         synced: false,
         
         addUsuario(usuario, callback=null){
-            models.Usuario.create({
-                login: usuario.login,
-                senha: usuario.senha,
-                nome: usuario.nome,
-                sobrenome: usuario.sobrenome,
-                email: usuario.email,
-                imagem: usuario.imagem,
-                cpf: usuario.cpf,
-                documento: usuario.documento,
-                selfie: usuario.selfie
+          models.Usuario.create({
+            login: usuario.login,
+            senha: usuario.senha,
+            nome: usuario.nome,
+            sobrenome: usuario.sobrenome,
+            email: usuario.email,
+            imagem: usuario.imagem,
+            cpf: usuario.cpf,
+            documento: usuario.documento,
+            selfie: usuario.selfie
             }).then(usuario_criado => callback(usuario_criado));
+        },
+
+        addImovel(imovel, callbakc=null){
+          models.imovel.create({
+            titulo: imovel.titulo,
+            descricao: imovel.descricao,
+            valor: imovel.valor,
+            imagens: imovel.imagens,
+            status: imovel.status,
+            rua: imovel.rua,
+            numero: imovel.numero,
+            bairro: imovel.bairro,
+            cidade: imovel.cidade,
+            complemento: imovel.complemento,
+            estado: imovel.estado,
+            acessibilidade: imovel.acessibilidade,
+            comodos: imovel.comodos,
+            regras: imovel.regras,
+            idUsuario: imovel.idUsuario
+          }).then(imovel_criado => callback(imovel_criado));
+        },
+
+        getAllImoveis(callback=null){
+          models.Imovel.findAll()
+          .then(all_imoveis => callback(all_imoveis));
         }
+
     }
   }
 }
