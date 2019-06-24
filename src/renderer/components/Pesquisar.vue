@@ -85,7 +85,7 @@
                                 <v-img
                                 class="white--text"
                                 height="130px"
-                                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                                :src="ap.imagens"
                                 >
                                 <v-container fill-height fluid>
                                     <v-layout fill-height>
@@ -122,7 +122,8 @@ export default {
         apartamentos: [],
         value3: [300, 2000],
         cidades: require('./cidades.json').mg_city_list,
-        selected_cidade: ''
+        selected_cidade: '',
+        path: ''
     }),
     props: {
         filtro: {
@@ -142,6 +143,7 @@ export default {
                         cidade: im.cidade,
                         title: im.titulo,
                         stars: im.estrelas,
+                        imagens: require('@/' + im.imagens)
                     });
                 });
             });
