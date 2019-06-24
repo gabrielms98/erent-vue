@@ -90,7 +90,7 @@
                                 <v-container fill-height fluid>
                                     <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
-                                        <span class="headline">{{ap.title}}</span>
+                                        <span class="headline" style="color: #FFFFFF;">{{ap.title}}</span>
                                     </v-flex>
                                     </v-layout>
                                 </v-container>

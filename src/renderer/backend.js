@@ -7,21 +7,21 @@ const Op = Sequelize.Op;
 //global vars/objects
 var models;
 
-/*const sequelize = new Sequelize('erent-bd', 'roo', 'engenharia1', {
+const sequelize = new Sequelize('erent-bd', 'user-erent', 'engenharia1', {
   host: '127.0.0.1',
   dialect: 'mysql',
   operatorsAliases: false,
   port: 5432,
   storage: 'erentdb.db'
-});*/
+});
 
-const sequelize = new Sequelize('erent-bd', 'root', '1234', {
+/*const sequelize = new Sequelize('erent-bd', 'root', '1234', {
   host: '127.0.0.1',
   dialect: 'mysql',
   operatorsAliases: false,
   port: 3306,
   storage: 'erentdb.db'
-});
+});*/
 
 const fatal_error = err => {remote.dialog.showMessageBox({type: 'warning', title: 'Falha ao conectar com o banco de dados!', message: 'Se voce é o dono do aplicativo, verifique se o banco de dados esta online ou se os parametros de conexão do sequelize estão corretos'});remote.getCurrentWindow().close();}
 
