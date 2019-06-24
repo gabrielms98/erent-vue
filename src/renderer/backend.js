@@ -35,18 +35,17 @@ const backend = {
 
         synced: false,
         
-        addUsuario(callback=null){
+        addUsuario(usuario, callback=null){
             models.Usuario.create({
-                id: 1,
-                login: "gabrielms98",
-                senha: "ricsoncuzao",
-                nome: "gb",
-                sobrenome: "batata",
-                email: "gmbiel1@gmail.com",
-                imagem: __dirname + "/assets/foto.png",
-                cpf: "13747530680",
-                documento: "25cm",
-                selfie: __dirname + "/assets/foto2.png"
+                login: usuario.login,
+                senha: usuario.senha,
+                nome: usuario.nome,
+                sobrenome: usuario.sobrenome,
+                email: usuario.email,
+                imagem: usuario.imagem,
+                cpf: usuario.cpf,
+                documento: usuario.documento,
+                selfie: usuario.selfie
             }).then(usuario_criado => callback(usuario_criado));
         }
     }
