@@ -63,9 +63,20 @@
         <div>
           <v-badge v-model="show" overlap :color="color_notification">
             <span v-if="new_notification" slot="badge" :color="color_notification">{{n_notf}}</span>
-            <v-btn class="ma-0" icon flat>
-              <v-icon :color="color_notification" size="35px">{{notification_icon}}</v-icon>
-            </v-btn>
+            <v-menu :close-on-content-click="false" :nudge-width="200" offset-x v-model="notification_badge">
+              <v-btn slot="activator" class="ma-0" icon flat>
+                <v-icon :color="color_notification" size="35px">{{notification_icon}}</v-icon>
+              </v-btn>
+              <v-card>
+                <v-card-title height="10px">
+                  <v-checkbox @click="allRead" v-model="all_read" label="Marcar todos como lido"></v-checkbox>
+                </v-card-title>
+                <div v-for="n in notification_list">
+                  <hr>
+                  <v-btn flat >{{n.conteudo}}</v-btn>
+                </div>
+              </v-card>
+            </v-menu>
           </v-badge>
         </div>
       </v-toolbar>
@@ -220,6 +231,7 @@ import { remote } from 'electron'
       username: '',
       pwd: '',
       menu_login: '',
+      notification_badge: '',
       filtros: [
         {text: 'Cidade'},
         {text: 'Quarto'},
@@ -242,7 +254,8 @@ import { remote } from 'electron'
       notification_icon: 'notifications',
       notification_list: [],
       color_notification: 'grey',
-      n_notf: 0
+      n_notf: 0,
+      all_read: false
     }),
     props: {
       source: String
@@ -312,11 +325,13 @@ import { remote } from 'electron'
         this.color_notification = this.new_notification ? 'red' : 'black';
       },
 
-      checkNotf(){
+      checkNotf: function(){
+        //this.notification_list = [];
         this.$backend.getAllNotificationsUser(Vue.prototype.$appName.id, all => {
           if(all.length == 0){
             return;
           } else {
+            this.notification_list = [];
             this.new_notification = false;
             this.n_notf=0;
             all.forEach(notf => {
@@ -324,7 +339,7 @@ import { remote } from 'electron'
                 this.n_notf++;
                 this.notification_list.push({
                   conteudo: notf.conteudo,
-                })
+                });
                 this.new_notification = true;
               }
             });
@@ -332,6 +347,16 @@ import { remote } from 'electron'
           }
         });
 
+      },
+
+      allRead: function(){
+        if(this.all_read == true){
+          //MARCAR TODAS NOTIFICACOES COMO LIDAS
+          this.$backend.markAllAsRead(Vue.prototype.$appName.id, () => {
+            this.all_read = false;
+            this.home();
+          });
+        }
       }
     }
   }

@@ -114,6 +114,13 @@ const backend = {
           })
         },
 
+        markAllAsRead(uid,  callback=null){
+          models.Notificacao.update(
+            {visualizado: 1},
+            {where: {idUsuario: uid}}
+          ).then(() => callback())
+        },
+
         //=============AVALIACAO=============//
 
 
