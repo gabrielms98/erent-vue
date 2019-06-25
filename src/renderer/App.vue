@@ -58,7 +58,7 @@
       </v-navigation-drawer>
       <v-toolbar :color="color_primary" app absolute clipped-left> 
         <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
-        <span class="title ml-3 mr-5">&nbsp&nbsp&nbsp<v-btn flat icon router to="/" class="custom_btn"><img src="@/assets/erent-logo-btn.png" width="100px"></v-btn></span>
+        <span class="title ml-3 mr-5">&nbsp&nbsp&nbsp<v-btn flat icon @click="home" class="custom_btn"><img src="@/assets/erent-logo-btn.png" width="100px"></v-btn></span>
         <v-spacer></v-spacer>
         <v-btn icon flat>
           <v-icon :color="color_notification">{{notification_icon}}</v-icon>
@@ -202,6 +202,7 @@
 
 <script>
 import Vue from 'vue'
+import { remote } from 'electron'
   export default {
     data: () => ({
       drawer: null,
@@ -233,39 +234,13 @@ import Vue from 'vue'
       new_notification: false,
       notification_icon: 'notifications',
       notification_list: [],
-      color_notification: 'black',
-      usuario1: {
-        id: 1,
-        login: 'gb',
-        senha: 'senha1',
-        nome: 'Gabriel',
-        sobrenome: 'Martins Silva',
-        email: 'gabriel.m.martins@ufv.br',
-        imagem: 'assets/eu.png',
-        cpf: '13747530680',
-        documento: '15382402',
-        selfie: 'assets/eu.png'
-      },
-      usuario2: {
-        id: 2,
-        login: 'rilson',
-        senha: 'senha2',
-        nome: 'Ricson',
-        sobrenome: 'Luiz',
-        email: 'rilson.da.silva@ufv.br',
-        imagem: 'assets/papagaio.png',
-        cpf: '1234567890',
-        documento: '12cm',
-        selfie: 'assets/papagaio.png'
-      },
-      selected_user: 1
+      color_notification: 'black'
     }),
     props: {
       source: String
     },
     mounted: function(){
-      this.notification_icon = this.new_notification ? 'notifications_active' : 'notifications';
-      this.color_notification = this.new_notification ? 'red' : 'black';
+      this.change_notification();
     },
     methods: {
       select: function(filtro){
@@ -275,25 +250,35 @@ import Vue from 'vue'
       },
 
       login: function(){
-        //USUARIO 1 SEMPRE FARA A REQUISIÇÃO E USUARIO 2 RECEBERA E ACEITARA/RECUSARA A REQUISICAO
+        
+        this.$backend.getUsuarioByCPF(this.username, user => {
+          if(user == null){
+            remote.dialog.showMessageBox({type: 'warning', title: '', message: ''});
+            return;
+          } else {
+            Vue.prototype.$appName = user;
+      
+            this.$backend.getAllNotificationsUser(user.id, all => {
+              if(all.length == 0){
+                console.log("falhou");
+                return;
+              } else {
+                all.forEach(notf => {
+                  if(notf.visualizado == false){
+                    this.notification_list.push({
+                      conteudo: notf.conteudo,
+                    })
+                  }
+                });
+                this.new_notification = true;
+                this.change_notification();
+              }
+            });
 
-        if(this.username == '13747530680') Vue.prototype.$appName = this.usuario1;
-        else Vue.prototype.$appName = this.usuario2;
-
-        this.selected_user = Vue.prototype.$appName.id;
-
-        this.$backend.getAllNotificationsUser(this.selected_user, all => {
-          all.forEach(notf => {
-            if(notf.visualizado == false){
-              this.notification_list.push({
-                conteudo: notf.conteudo,
-              })
-            }
-          })
-        })
-
-        this.session = true;
-        this.$router.push('/');
+            this.session = true;
+            this.$router.push('/'); 
+          }
+        });
       },
 
       logout: function(){
@@ -306,6 +291,16 @@ import Vue from 'vue'
 
       voltar: function(){
         this.cadastrar = false;
+      },
+
+      home: function(){
+        this.change_notification();
+        this.$router.push('/');
+      },
+      
+      change_notification: function(){
+        this.notification_icon = this.new_notification ? 'notifications_active' : 'notifications';
+        this.color_notification = this.new_notification ? 'red' : 'black';
       }
     }
   }

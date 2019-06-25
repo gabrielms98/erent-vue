@@ -43,6 +43,7 @@ const backend = {
 
         synced: false,
 
+        //=============USUARIO=============//
         addUsuario(usuario, callback=null){
           models.Usuario.create({
             login: usuario.login,
@@ -57,6 +58,17 @@ const backend = {
             }).then(usuario_criado => callback(usuario_criado));
         },
 
+        getUsuarioByCPF(uid, callback=null){
+          models.Usuario.findOne({where: {cpf: uid}})
+          .then(usuario => callback(usuario));
+        },
+
+        getUsuarioById(uid, callback=null){
+          models.Usuario.findOne({where: {id: uid}})
+          .then(user => callback(user));
+        },
+
+        //=============IMOVEL=============//
         addImovel(imovel, callbakc=null){
           models.imovel.create({
             titulo: imovel.titulo,
@@ -82,12 +94,42 @@ const backend = {
           .then(all_imoveis => callback(all_imoveis));
         },
 
-        getAllNotificationsUser(uid, callback=null){
-          models.Notificacao.findAll(
-            {where: {idUsuario: uid}}
-          ).then(all_notifications => callback(all_notifications));
-        }
+        getImovelById(iid, callback=null){
+          models.Imovel.findOne({where: {id: iid}})
+          .then(imovel => callback(imovel));
+        },
 
+        //=============NOTIFICACAO=============//
+        getAllNotificationsUser(uid, callback=null){
+          models.Notificacao.findAll({where: {idUsuario: uid}})
+          .then(all_notifications => callback(all_notifications));
+        },
+
+        addNotificacao(notf, callback=null){
+          models.Notificacao.create({
+            conteudo: notf.conteudo,
+            data: notf.data,
+            visualizado: false,
+            idUsuario: notf.idUsuario
+          })
+        },
+
+        //=============AVALIACAO=============//
+
+
+
+        //=============CONTRATO=============//
+
+
+        
+        //=============REQUISICAO=============//
+        addRequest(req, callback=null){
+          models.Requisicao.create({
+            data: req.data,
+            idUsuario: req.idUsuario,
+            idImovel: req.idImovel
+          }).then(req => callback(req));
+        }
     }
   }
 }
