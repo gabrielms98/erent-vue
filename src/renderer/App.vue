@@ -60,9 +60,16 @@
         <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
         <span class="title ml-3 mr-5">&nbsp&nbsp&nbsp<v-btn flat icon @click="home" class="custom_btn"><img src="@/assets/erent-logo-btn.png" width="100px"></v-btn></span>
         <v-spacer></v-spacer>
-        <v-btn icon flat>
-          <v-icon :color="color_notification">{{notification_icon}}</v-icon>
-        </v-btn>
+        <div>
+          <v-badge slot="activator">
+          <v-template v-slot:badge >
+            <span></span>
+          </v-template>
+          <v-btn class="ma-0" icon flat>
+            <v-icon :color="color_notification">{{notification_icon}}</v-icon>
+          </v-btn>
+        </v-badge>
+        </div>
       </v-toolbar>
       <v-content>
         <router-view></router-view>
@@ -250,27 +257,26 @@ import { remote } from 'electron'
       },
 
       login: function(){
-        
+        console.log("olaaaaaa");
         this.$backend.getUsuarioByCPF(this.username, user => {
           if(user == null){
             remote.dialog.showMessageBox({type: 'warning', title: '', message: ''});
             return;
           } else {
             Vue.prototype.$appName = user;
-      
+
             this.$backend.getAllNotificationsUser(user.id, all => {
               if(all.length == 0){
-                console.log("falhou");
                 return;
               } else {
                 all.forEach(notf => {
-                  if(notf.visualizado == false){
+                  if(notf.visualizado == 0){
                     this.notification_list.push({
                       conteudo: notf.conteudo,
                     })
+                    this.new_notification = true;
                   }
                 });
-                this.new_notification = true;
                 this.change_notification();
               }
             });
@@ -294,13 +300,33 @@ import { remote } from 'electron'
       },
 
       home: function(){
-        this.change_notification();
+        this.checkNotf();
         this.$router.push('/');
       },
       
       change_notification: function(){
         this.notification_icon = this.new_notification ? 'notifications_active' : 'notifications';
         this.color_notification = this.new_notification ? 'red' : 'black';
+      },
+
+      checkNotf(){
+        this.$backend.getAllNotificationsUser(Vue.prototype.$appName.id, all => {
+          if(all.length == 0){
+            return;
+          } else {
+            this.new_notification = false;
+            all.forEach(notf => {
+              if(notf.visualizado == 0){
+                this.notification_list.push({
+                  conteudo: notf.conteudo,
+                })
+                this.new_notification = true;
+              }
+            });
+            this.change_notification();
+          }
+        });
+
       }
     }
   }
