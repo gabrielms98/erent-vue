@@ -3,30 +3,18 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
     data: () => ({
         nome: ''
     }),
     methods: {
         cliquei: function(){
-            console.log("Cliquei")
+            console.log(Vue.prototype.$appName);
         }
     },
 
     mounted: function(){
-        this.$backend.addUsuario({
-            login: "gabrielms98",
-            senha: "ricsoncuzao",
-            nome: "gb",
-            sobrenome: "batata",
-            email: "gmbiel1@gmail.com",
-            imagem: __dirname + "/assets/foto.png",
-            cpf: "13747530680",
-            documento: "25cm",
-            selfie: __dirname + "/assets/foto2.png"
-        }, (created) => {
-            console.log(created);
-        });
         
     }
 }

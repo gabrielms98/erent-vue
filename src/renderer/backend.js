@@ -80,6 +80,12 @@ const backend = {
         getAllImoveis(callback=null){
           models.Imovel.findAll()
           .then(all_imoveis => callback(all_imoveis));
+        },
+
+        getAllNotificationsUser(uid, callback=null){
+          models.Notificacao.findAll(
+            {where: {idUsuario: uid}}
+          ).then(all_notifications => callback(all_notifications));
         }
 
     }

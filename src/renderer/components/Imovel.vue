@@ -7,21 +7,21 @@
                         <v-card-title>
                             <v-layout row wrap>
                                 <v-flex d-flex xs12 sm6 md8>
-                                    <img src="@/assets/showroom.jpg" width="580px" height="300px" alt="">
+                                    <img :src="primary_image" width="580px" height="300px" alt="">
                                 </v-flex>
                                 <v-flex d-flex xs12 sm6 md4 >
                                     <v-layout row wrap>
                                         <v-flex d-flex > 
-                                            <img src="@/assets/showroom.jpg" height="150px" width="100px">
+                                            <img @click="change_primary_image(imgs[0], 0)" :src="imgs[0]" height="150px" width="100px">
                                         </v-flex>
                                         <v-flex d-flex > 
-                                            <img src="@/assets/showroom.jpg" height="150px" width="100px">
+                                            <img @click="change_primary_image(imgs[1], 1)" :src="imgs[1]" height="150px" width="100px">
                                         </v-flex>
                                         <v-flex d-flex > 
-                                            <img src="@/assets/showroom.jpg" height="142px" width="100px">
+                                            <img @click="change_primary_image(imgs[2], 2)" :src="imgs[2]" height="142px" width="100px">
                                         </v-flex>
                                             <v-flex d-flex > 
-                                            <img src="@/assets/showroom.jpg" height="142px" width="100px">
+                                            <img @click="change_primary_image(imgs[3], 3)" :src="imgs[3]" height="142px" width="100px">
                                         </v-flex>
                                     </v-layout>
                                 </v-flex>
@@ -90,15 +90,29 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
     data: () => ({
         n_estrelas: 5,
         color_primary: '#7b6ff9',
+        primary_image: require('@/assets/1.png'),
+        imgs: [require('@/assets/2.png'), require('@/assets/3.png'), require('@/assets/4.png'), require('@/assets/5.png')],
+        imagem: '',
         lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`
     }),
     props: {
         id: {
             default: -1
+        }
+    },
+    mounted: function(){
+        
+    },
+    methods: {
+        change_primary_image: function(img, i){
+            let aux = this.primary_image;
+            this.primary_image = img;
+            this.imgs[i] = aux;
         }
     }
 }
