@@ -23,6 +23,12 @@ export default new Router({
       props: true
     },
     {
+      path: '/Imovel:id',
+      name: 'Imovel',
+      component: require('@/components/Imovel.vue').default,
+      props: true
+    },
+    {
       path: '*',
       redirect: '/'
     }

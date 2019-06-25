@@ -7,6 +7,7 @@
         clipped
         class="grey lighten-4"
         app
+      
       >
         <v-list
           dense
@@ -55,7 +56,7 @@
           </v-flex>
         </v-list>
       </v-navigation-drawer>
-      <v-toolbar :color="color_primary" app absolute clipped-left>
+      <v-toolbar :color="color_primary" app absolute clipped-left> 
         <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
         <span class="title ml-3 mr-5">&nbsp&nbsp&nbsp<v-btn flat icon router to="/" class="custom_btn"><img src="@/assets/erent-logo-btn.png" width="100px"></v-btn></span>
         <v-spacer></v-spacer>
@@ -196,8 +197,9 @@
 
 <style>
   .back {
-    background-image: url(./assets/showroom.jpg);
+    background-image: url(./assets/showroom-blur.jpg);
     background-size: cover;
+ 
   }
   #inspire {
     background: none;
