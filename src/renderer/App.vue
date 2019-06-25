@@ -61,14 +61,12 @@
         <span class="title ml-3 mr-5">&nbsp&nbsp&nbsp<v-btn flat icon @click="home" class="custom_btn"><img src="@/assets/erent-logo-btn.png" width="100px"></v-btn></span>
         <v-spacer></v-spacer>
         <div>
-          <v-badge slot="activator">
-          <v-template v-slot:badge >
-            <span></span>
-          </v-template>
-          <v-btn class="ma-0" icon flat>
-            <v-icon :color="color_notification">{{notification_icon}}</v-icon>
-          </v-btn>
-        </v-badge>
+          <v-badge v-model="show" overlap :color="color_notification">
+            <span v-if="new_notification" slot="badge" :color="color_notification">{{n_notf}}</span>
+            <v-btn class="ma-0" icon flat>
+              <v-icon :color="color_notification" size="35px">{{notification_icon}}</v-icon>
+            </v-btn>
+          </v-badge>
         </div>
       </v-toolbar>
       <v-content>
@@ -212,8 +210,10 @@ import Vue from 'vue'
 import { remote } from 'electron'
   export default {
     data: () => ({
+      el: '#app',
       drawer: null,
       pesquisa: '',
+      show: true,
       cadastrar: false,
       color_primary: '#7b6ff9',
       session: false,
@@ -241,7 +241,8 @@ import { remote } from 'electron'
       new_notification: false,
       notification_icon: 'notifications',
       notification_list: [],
-      color_notification: 'black'
+      color_notification: 'grey',
+      n_notf: 0
     }),
     props: {
       source: String
@@ -269,8 +270,10 @@ import { remote } from 'electron'
               if(all.length == 0){
                 return;
               } else {
+                this.n_notf =0;
                 all.forEach(notf => {
                   if(notf.visualizado == 0){
+                    this.n_notf++;
                     this.notification_list.push({
                       conteudo: notf.conteudo,
                     })
@@ -315,8 +318,10 @@ import { remote } from 'electron'
             return;
           } else {
             this.new_notification = false;
+            this.n_notf=0;
             all.forEach(notf => {
               if(notf.visualizado == 0){
+                this.n_notf++;
                 this.notification_list.push({
                   conteudo: notf.conteudo,
                 })
