@@ -241,7 +241,7 @@ import { remote } from 'electron'
       tipo_filtro: '',
       items: [
         { icon: 'search', text: 'Pesquisar', to: '/Pesquisar' },
-        { icon: 'touch_app', text: 'Requisições' },
+        { icon: 'touch_app', text: 'Requisições', to: '/ListaRequisicao' },
         { divider: true },
         { icon: 'local_offer', text: 'Meus Anúncios' },
         { icon: 'local_atm', text: 'Meus Alugados' },

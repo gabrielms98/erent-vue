@@ -29,6 +29,11 @@ export default new Router({
       props: true
     },
     {
+      path: '/ListaRequisicao',
+      name: 'ListaRequisicao',
+      component: require('@/components/ListaRequisicao.vue').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
