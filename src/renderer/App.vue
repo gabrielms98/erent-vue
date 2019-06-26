@@ -219,6 +219,7 @@
 <script>
 import Vue from 'vue'
 import { remote } from 'electron'
+import { setInterval } from 'timers';
   export default {
     data: () => ({
       el: '#app',
@@ -261,6 +262,7 @@ import { remote } from 'electron'
       source: String
     },
     mounted: function(){
+      setInterval(this.checkNotf, 5000);
       this.change_notification();
     },
     methods: {
@@ -271,13 +273,14 @@ import { remote } from 'electron'
       },
 
       login: function(){
-        console.log("olaaaaaa");
         this.$backend.getUsuarioByCPF(this.username, user => {
           if(user == null){
             remote.dialog.showMessageBox({type: 'warning', title: '', message: ''});
             return;
           } else {
             Vue.prototype.$appName = user;
+
+            console.log(user);
 
             this.$backend.getAllNotificationsUser(user.id, all => {
               if(all.length == 0){
@@ -325,7 +328,7 @@ import { remote } from 'electron'
         this.color_notification = this.new_notification ? 'red' : 'black';
       },
 
-      checkNotf: function(){
+      checkNotf: async function(){
         //this.notification_list = [];
         this.$backend.getAllNotificationsUser(Vue.prototype.$appName.id, all => {
           if(all.length == 0){
@@ -357,7 +360,7 @@ import { remote } from 'electron'
             this.home();
           });
         }
-      }
+      },
     }
   }
 </script>

@@ -156,6 +156,7 @@ export default {
                 })
             }
         })
+
     },
     methods: {
         change_primary_image: function(img, i){
@@ -177,7 +178,7 @@ export default {
                     this.$backend.addNotificacao({
                         conteudo: 'Solicitação de aluguel',
                         data: this.inicio,
-                        idUsuario: Vue.prototype.$appName.id
+                        idUsuario: this.dono_id
                     }, (not) => {
                         
                     });
