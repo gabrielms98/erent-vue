@@ -282,23 +282,7 @@ import { setInterval } from 'timers';
 
             console.log(user);
 
-            this.$backend.getAllNotificationsUser(user.id, all => {
-              if(all.length == 0){
-                return;
-              } else {
-                this.n_notf =0;
-                all.forEach(notf => {
-                  if(notf.visualizado == 0){
-                    this.n_notf++;
-                    this.notification_list.push({
-                      conteudo: notf.conteudo,
-                    })
-                    this.new_notification = true;
-                  }
-                });
-                this.change_notification();
-              }
-            });
+            this.checkNotf();
 
             this.session = true;
             this.$router.push('/'); 
@@ -308,6 +292,8 @@ import { setInterval } from 'timers';
 
       logout: function(){
         this.session = false;
+        this.notification_list = [];
+        this.new_notification = false;
       },
 
       register(){
@@ -332,7 +318,9 @@ import { setInterval } from 'timers';
         //this.notification_list = [];
         this.$backend.getAllNotificationsUser(Vue.prototype.$appName.id, all => {
           if(all.length == 0){
-            return;
+            console.log("nenhuma notificacao");
+            this.new_notification = false;
+            this.notification_list = [];
           } else {
             this.notification_list = [];
             this.new_notification = false;
@@ -346,8 +334,8 @@ import { setInterval } from 'timers';
                 this.new_notification = true;
               }
             });
-            this.change_notification();
           }
+          this.change_notification();
         });
 
       },

@@ -78,10 +78,17 @@ export default {
                                 return;
                             } else {
                                 if(imovel.idUsuario == Vue.prototype.$appName.id){
-                                    this.requisicoes.push({
-                                        titulo: imovel.titulo,
-                                        entrada: req.data,
-                                        img: require('@/' + imovel.imagens)
+                                    this.$backend.getUsuarioById(req.idUsuario, (user) => {
+                                        if(user == null){
+                                            //ERROR HANDLING
+                                            return;
+                                        } else {
+                                            this.requisicoes.push({
+                                                titulo: imovel.titulo,
+                                                entrada: req.data,
+                                                img: require('@/' + user.imagem)
+                                            })
+                                        }
                                     })
                                 }
                             }
