@@ -137,6 +137,11 @@ const backend = {
             idUsuario: req.idUsuario,
             idImovel: req.idImovel
           }).then(req => callback(req));
+        },
+
+        getAllRequests(callback=null){
+          models.Requisicao.findAll()
+          .then(all_req => callback(all_req));
         }
     }
   }

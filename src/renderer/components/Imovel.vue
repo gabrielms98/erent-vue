@@ -168,7 +168,7 @@ export default {
         request: function(){
             this.$backend.addRequest({
                 data: this.inicio,
-                idUsuario: this.dono_id,
+                idUsuario: Vue.prototype.$appName.id,
                 idImovel: this.imovel_id
             }, (req) => {
                 if(req == null){
