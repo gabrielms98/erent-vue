@@ -10,7 +10,7 @@ export default {
     }),
     methods: {
         cliquei: function(){
-            console.log(Vue.prototype.$appName);
+            //console.log(Vue.prototype.$appName);
         }
     },
 

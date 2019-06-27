@@ -263,7 +263,7 @@ import { setInterval } from 'timers';
     },
     mounted: function(){
       setInterval(this.checkNotf, 5000);
-      this.change_notification();
+      //this.change_notification();
     },
     methods: {
       select: function(filtro){
@@ -315,7 +315,7 @@ import { setInterval } from 'timers';
       },
 
       checkNotf: async function(){
-        //this.notification_list = [];
+        
         this.$backend.getAllNotificationsUser(Vue.prototype.$appName.id, all => {
           if(all.length == 0){
             console.log("nenhuma notificacao");

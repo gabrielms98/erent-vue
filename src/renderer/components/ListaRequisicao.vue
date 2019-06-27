@@ -3,7 +3,7 @@
         <v-container>
             <v-layout>
                 <v-flex xs30>
-                    <h1>Requisições</h1>
+                    <h1>Requisições recebidas</h1>
                     <v-card color="#fafafa">
                         <v-card-text>
                             <v-flex xs20 v-for="req in requisicoes">
@@ -101,6 +101,19 @@
                 </v-flex>
             </v-layout>
         </v-container>
+
+                <v-container>
+            <v-layout>
+                <v-flex xs30>
+                    <h1>Requisições feitas</h1>
+                    <v-card color="#fafafa">
+                        <v-card-text>
+                            
+                        </v-card-text>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </div>
 </template>
 
@@ -187,6 +200,10 @@ export default {
                                                 this.sendNotification(req);
                                             }
                                         });
+        },
+
+        recusar: function(req){
+
         },
 
         sendNotification: function(){
