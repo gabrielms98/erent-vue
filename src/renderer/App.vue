@@ -73,7 +73,7 @@
                 </v-card-title>
                 <div v-for="n in notification_list">
                   <hr>
-                  <v-btn flat >{{n.conteudo}}</v-btn>
+                  <v-btn style="width: 230px;" flat >{{n.conteudo}}</v-btn>
                 </div>
               </v-card>
             </v-menu>
