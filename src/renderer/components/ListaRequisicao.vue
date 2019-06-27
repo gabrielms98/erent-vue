@@ -85,7 +85,7 @@
                                                     </v-card-text>
                                                     <v-card-actions>
                                                         <v-spacer></v-spacer>
-                                                        <v-btn color="green" @click="aceitar(req)"><v-icon>done</v-icon><span>aceitar</span></v-btn>
+                                                        <v-btn color="green" @click="aceitar"><v-icon>done</v-icon><span>aceitar</span></v-btn>
                                                         <v-btn color="red"><v-icon>delete</v-icon><span>recusar</span></v-btn>
                                                     </v-card-actions>
                                                 </v-card>
@@ -106,6 +106,7 @@
 
 <script>
 import Vue from 'vue'
+import { remote } from 'electron'
 export default {
     data: () => ({
         requisicoes: [],
@@ -117,7 +118,8 @@ export default {
         imagem: '',
         entrada: '',
         cpf: '',
-        req_id: ''
+        req_id: '',
+        user_id: ''
     }),
 
     mounted: function(){
@@ -152,7 +154,8 @@ export default {
                                                 user_cpf: user.cpf,
                                                 user_usr: user.login,
                                                 user_email: user.email,
-                                                id: req.id
+                                                id: req.id,
+                                                user_id: user.id
                                             })
                                         }
                                     })
@@ -174,10 +177,33 @@ export default {
             this.imagem = req.img;
             this.entrada = req.entrada;
             this.req_id = req.id;
+            this.user_id = req.user_id;
         },
 
         aceitar: function(req){
-            
+            remote.dialog.showMessageBox({type: 'warning', title:'Você tem certeza? ', message: 'Você tem certeza de que aceita essa requisição? Uma vez aceitada será gerado o contrato para o requerinte confirmar o pagamente e o aluguel!',
+                                        buttons: ['Sim, eu tenho certeza.', 'Não! Eu não quero fazer isso!']}, (idx) => {
+                                            if(idx==0){
+                                                this.sendNotification(req);
+                                            }
+                                        });
+        },
+
+        sendNotification: function(){
+            this.$backend.addNotificacao({
+                conteudo: 'Requisição aceita!',
+                data: this.entrada,
+                visualizado: false,
+                idUsuario: this.user_id
+            }, (notf) => {
+                if(notf == null){
+                    //ERROR HANDLING
+                    return;
+                } else {
+                    console.log("notf: ");
+                    console.log(notf);
+                }
+            })
         }
     }
 }
