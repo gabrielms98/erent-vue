@@ -11,16 +11,16 @@
                                 </v-flex>
                                 <v-flex d-flex xs12 sm6 md4 >
                                     <v-layout row wrap>
-                                        <v-flex d-flex > 
+                                        <v-flex d-flex >
                                             <img @click="change_primary_image(imgs[0], 0)" :src="imgs[0]" height="150px" width="100px">
                                         </v-flex>
-                                        <v-flex d-flex > 
+                                        <v-flex d-flex >
                                             <img @click="change_primary_image(imgs[1], 1)" :src="imgs[1]" height="150px" width="100px">
                                         </v-flex>
-                                        <v-flex d-flex > 
+                                        <v-flex d-flex >
                                             <img @click="change_primary_image(imgs[2], 2)" :src="imgs[2]" height="142px" width="100px">
                                         </v-flex>
-                                            <v-flex d-flex > 
+                                            <v-flex d-flex >
                                             <img @click="change_primary_image(imgs[3], 3)" :src="imgs[3]" height="142px" width="100px">
                                         </v-flex>
                                     </v-layout>
@@ -110,6 +110,7 @@
 </template>
 
 <script>
+import {remote}from 'electron'
 import Vue from 'vue'
 export default {
     data: () => ({
@@ -135,7 +136,8 @@ export default {
     mounted: function(){
         this.$backend.getImovelById(this.id, imovel => {
             if(imovel == null){
-                //TODO: ERROR HANDLING
+                remote.dialog.showMessageBox({type: 'warning', title: 'Algo de errado não está certo', message: 'Imóvel não encontrado!'});
+                this.$router.push('/');
                 return;
             } else {
                 this.primary_image = require('@/' + imovel.imagens);
@@ -148,7 +150,8 @@ export default {
 
                 this.$backend.getUsuarioById(this.dono_id, user => {
                     if(user == null){
-                        //TODO: ERROR HANDLING
+                        remote.dialog.showMessageBox({type: 'warning', title: 'Algo de errado não está certo', message: 'Dono não encontrado!'});
+                        this.$router.push('/');
                         return;
                     } else {
                         this.dono_image = require('@/' + user.selfie)
@@ -172,7 +175,7 @@ export default {
                 idImovel: this.imovel_id
             }, (req) => {
                 if(req == null){
-                    //TODO: ERROR HANDLING
+                    remote.dialog.showMessageBox({type: 'warning', title: 'Algo de errado não está certo', message: 'Falha ao enviar requisição\n Tente novamente mais tarde'});
                     return;
                 } else {
                     this.$backend.addNotificacao({
@@ -180,9 +183,8 @@ export default {
                         data: this.inicio,
                         idUsuario: this.dono_id
                     }, (not) => {
-                        
+
                     });
-                    console.log(req);
                     this.dialog_request = false;
                 }
             })
