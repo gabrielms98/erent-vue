@@ -5,7 +5,7 @@
                 <v-flex xs30>
                     <h1>Requisições recebidas</h1>
                     <v-card color="#fafafa">
-                        <v-card-text>
+                        <v-card-text v-if="noreq">
                             <v-flex xs20 v-for="req in requisicoes">
                                 <v-card >
                                    <v-layout row wrap class="text-xs-center">
@@ -44,7 +44,7 @@
                                                 <v-btn slot="activator" @click="salvaUser(req)"><v-icon>add</v-icon><span>MAIS INFOMAÇÕES</span></v-btn>
                                                 <v-card>
                                                     <v-card-title>
-                                                        Informações da Requisição do apartamento: &nbsp<h4>{{titulo}}</h4> 
+                                                        Informações da Requisição do apartamento: &nbsp<h4>{{titulo}}</h4>
                                                         <v-spacer></v-spacer>
                                                         <v-btn flat icon @click="dialog_req = false">x</v-btn>
                                                         </v-card-title>
@@ -97,6 +97,13 @@
                                 <br>
                             </v-flex>
                         </v-card-text>
+                        <v-card-text v-else>
+                          <v-container fill-height>
+                            <v-layout row wrap justify-center>
+                                <h4><v-icon>report</v-icon><span> &nbsp Você não possui requisições</span></h4>
+                            </v-layout>
+                          </v-container>
+                        </v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -108,7 +115,7 @@
                     <h1>Requisições feitas</h1>
                     <v-card color="#fafafa">
                         <v-card-text>
-                            
+
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -123,6 +130,7 @@ import { remote } from 'electron'
 export default {
     data: () => ({
         requisicoes: [],
+        seila: false,
         dialog_req: false,
         titulo: '',
         nome: '',
@@ -142,10 +150,11 @@ export default {
     methods: {
         getAllRequisicoes: function(uid){
             this.$backend.getAllRequests((all_req) => {
-                if(all_req == null){
-                    //ERROR HANDLING
+                if(all_req.length == 0){
+                    this.noreq = false;
                     return;
                 } else {
+                    this.noreq = true;
                     all_req.forEach(req => {
                         this.$backend.getImovelById(req.idImovel, (imovel) => {
                             if(imovel == null){
