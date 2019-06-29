@@ -116,24 +116,28 @@
                     <v-card color="#fafafa">
                         <v-card-text>
                             <v-container>
-                                <v-layout row wrap>
-                                    <v-data-table
-                                    v-model="selected"
-                                    :headers="headers"
-                                    :items="items"
-                                    :pagination.sync="pagination"
-                                    item-key="id"
-                                    class="elevation-1"
-                                    rows-per-page-text="Linhas por página"
-                                    :rows-per-page-items="rowsppitems"
-                                    >
-                                        <template>
-                                            <tr>titulo</tr>
-                                            <tr>data</tr>
-                                            <tr>status</tr>
-                                            <tr><v-btn>contrato</v-btn></tr>
-                                        </template>
-                                    </v-data-table>
+                                <v-layout row justify-center id="wrapper">
+                                    <v-flex xs12 class="mt-4">
+                                        <v-data-table
+                                        v-model="selected"
+                                        :headers="headers"
+                                        :items="items"
+                                        :pagination.sync="pagination"
+                                        item-key="id"
+                                        class="elevation-1"
+                                        rows-per-page-text="Linhas por página"
+                                        :rows-per-page-items="rowsppitems"
+                                        >
+                                            <template slot="items" slot-scope="props">
+                                                <tr>
+                                                    <td>{{props.item.titulo}}</td>
+                                                    <td>{{props.item.data}}</td>
+                                                    <td><v-icon>{{props.item.status}}</v-icon></td>
+                                                    <td><v-btn @click="contrato(props.item.id_contrato)"><v-icon>create</v-icon><span>contrato</span></v-btn></td>
+                                                </tr>
+                                            </template>
+                                        </v-data-table>
+                                    </v-flex>
                                 </v-layout>
                             </v-container>
                         </v-card-text>
@@ -172,15 +176,15 @@ export default {
         {
             text: "Titulo",
             align: "left",
-            value: "name"
+            value: "titulo"
         },
         {
             text: "Data Entrada",
-            value: "production_sys"
+            value: "data"
         },
         {
             text: "Status",
-            value: "city"
+            value: "status"
         },
         {
             text: "",
@@ -196,6 +200,7 @@ export default {
 
     methods: {
         getAllRequisicoes: function(uid){
+            this.items = [];
             this.$backend.getAllRequests((all_req) => {
                 if(all_req.length == 0){
                     this.noreq = false;
@@ -229,9 +234,17 @@ export default {
                                         }
                                     })
                                 }
+                                if(req.idUsuario == Vue.prototype.$appName.id){
+                                    this.items.push({
+                                        titulo: imovel.titulo,
+                                        data: req.data,
+                                        status: (req.status == 1) ? 'checkcircle' : (req.status == 2) ? 'alarm' : 'error',
+                                        id_contrato: -1
+                                    })
+                                }
                             }
                         })
-                    })
+                    });
                 }
             })
         },
