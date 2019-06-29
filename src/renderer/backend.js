@@ -2,29 +2,24 @@ const Sequelize = require('sequelize');
 const remote = require('electron').remote;
 const Op = Sequelize.Op;
 
+require('dotenv').config();
+
 //helper functions
 
 //global vars/objects
 var models;
 
-/*const sequelize = new Sequelize('erent-bd', 'user-erent', 'engenharia1', {
-  host: '127.0.0.1',
-  dialect: 'mysql',
-  operatorsAliases: false,
-  port: 5432,
-  storage: 'erentdb.db'
-});*/
 
 //=============== REMOTE MYSQL DATABASE ===============//
-const sequelize = new Sequelize('bLtEva7XWB', 'bLtEva7XWB', 'p6JDUZ0ku8', {
-  host: 'remotemysql.com',
+const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_SCHEMA, process.env.DATABASE_PWD, {
+  host: process.env.DATABASE_URL,
   dialect: 'mysql',
   operatorsAliases: false,
-  port: 3306,
-  storage: 'erentdb.db'
+  port: process.env.DATABASE_PORT,
+  storage: process.env.DATABASE_STORAGE
 });
 
-const fatal_error = err => {remote.dialog.showMessageBox({type: 'warning', title: 'Falha ao conectar com o banco de dados!', message: 'Se voce é o dono do aplicativo, verifique se o banco de dados esta online ou se os parametros de conexão do sequelize estão corretos'});remote.getCurrentWindow().close();}
+const fatal_error = err => {remote.dialog.showMessageBox({type: 'warning', title: 'Falha ao conectar com o banco de dados!', message: 'Se voce é o dono do aplicativo, verifique se o banco de dados esta online ou se os parametros de conexão do sequelize estão corretos!'});remote.getCurrentWindow().close();}
 
 
 const sync = () => sequelize.sync();

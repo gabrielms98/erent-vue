@@ -56,7 +56,7 @@
           </v-flex>
         </v-list>
       </v-navigation-drawer>
-      <v-toolbar :color="color_primary" app absolute clipped-left> 
+      <v-toolbar :color="color_primary" fixed app absolute clipped-left> 
         <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
         <span class="title ml-3 mr-5">&nbsp&nbsp&nbsp<v-btn flat icon @click="home" class="custom_btn"><img src="@/assets/erent-logo-btn.png" width="100px"></v-btn></span>
         <v-spacer></v-spacer>
@@ -318,7 +318,6 @@ import { setInterval } from 'timers';
         
         this.$backend.getAllNotificationsUser(Vue.prototype.$appName.id, all => {
           if(all.length == 0){
-            console.log("nenhuma notificacao");
             this.new_notification = false;
             this.notification_list = [];
           } else {

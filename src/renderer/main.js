@@ -24,7 +24,7 @@ Vue.config.productionTip = false;
       components: { App },
       router,
       store,
-      template: '<App/>'
+      template: '<App/>',
     }).$mount('#app')
   }
   else setTimeout(ignition, 5);

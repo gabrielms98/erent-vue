@@ -3,8 +3,8 @@
         <v-container>
             <v-layout>
                 <v-flex xs30>
-                    <h1>Requisições recebidas</h1>
-                    <v-card color="#fafafa">
+                    <h1>Requisições recebidas<v-btn flat icon @click="show = !show"><v-icon>add</v-icon></v-btn></h1>
+                    <v-card color="#fafafa" v-if="show">
                         <v-card-text>
                             <v-flex xs20 v-for="req in requisicoes">
                                 <v-card >
@@ -132,7 +132,8 @@ export default {
         entrada: '',
         cpf: '',
         req_id: '',
-        user_id: ''
+        user_id: '',
+        show: true
     }),
 
     mounted: function(){
