@@ -34,6 +34,11 @@ export default new Router({
       component: require('@/components/ListaRequisicao.vue').default
     },
     {
+      path: '/Contratos',
+      name: 'Contratos',
+      component: require('@/components/Contratos.vue').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

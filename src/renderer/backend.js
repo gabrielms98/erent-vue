@@ -65,7 +65,7 @@ const backend = {
         },
 
         //=============IMOVEL=============//
-        addImovel(imovel, callbakc=null){
+        addImovel(imovel, callback=null){
           models.imovel.create({
             titulo: imovel.titulo,
             descricao: imovel.descricao,
@@ -122,21 +122,48 @@ const backend = {
 
 
         //=============CONTRATO=============//
+        addContrato(obj, callback=null){
+          models.Contrato.create({
+            status: obj.status,
+            metodoPagamento: obj.metodoPagamento,
+            idUsuario: obj.idUsuario,
+            idImovel: obj.Imovel,
+            data: obj.data
+          }).then(contrato => callback(contrato));
+        },
+
+        getAllContratosByUser(uid, callback=null){
+          models.Contrato.findAll({where: {idUsuario: uid}})
+          .then(all_contrato => callback(all_contrato));
+        },
 
 
-        
+
         //=============REQUISICAO=============//
         addRequest(req, callback=null){
           models.Requisicao.create({
             data: req.data,
             idUsuario: req.idUsuario,
-            idImovel: req.idImovel
+            idImovel: req.idImovel,
+            status: req.status
           }).then(req => callback(req));
+        },
+
+        getRequestById(rid ,callback=null){
+          models.Requisicao.findOne({where: {id: rid}})
+          .then(requisicao => callback(requisicao));
         },
 
         getAllRequests(callback=null){
           models.Requisicao.findAll()
           .then(all_req => callback(all_req));
+        },
+
+        changeRequestStatus(ustatus, uid, callback=null){
+          models.Requisicao.update(
+            { status: ustatus},
+            { where: {id: uid}}
+          ).then(() => callback());
         }
     }
   }

@@ -172,7 +172,8 @@ export default {
             this.$backend.addRequest({
                 data: this.inicio,
                 idUsuario: Vue.prototype.$appName.id,
-                idImovel: this.imovel_id
+                idImovel: this.imovel_id,
+                status: 2
             }, (req) => {
                 if(req == null){
                     remote.dialog.showMessageBox({type: 'warning', title: 'Algo de errado não está certo', message: 'Falha ao enviar requisição\n Tente novamente mais tarde'});

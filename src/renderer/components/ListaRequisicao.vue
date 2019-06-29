@@ -86,7 +86,7 @@
                                                     <v-card-actions>
                                                         <v-spacer></v-spacer>
                                                         <v-btn color="green" @click="aceitar"><v-icon>done</v-icon><span>aceitar</span></v-btn>
-                                                        <v-btn color="red"><v-icon>delete</v-icon><span>recusar</span></v-btn>
+                                                        <v-btn color="red" @click="recusar"><v-icon>delete</v-icon><span>recusar</span></v-btn>
                                                     </v-card-actions>
                                                 </v-card>
                                             </v-dialog>
@@ -132,8 +132,9 @@
                                                 <tr>
                                                     <td>{{props.item.titulo}}</td>
                                                     <td>{{props.item.data}}</td>
-                                                    <td><v-icon>{{props.item.status}}</v-icon></td>
+                                                    <td><v-icon :title="props.item.stat">{{props.item.status}}</v-icon></td>
                                                     <td><v-btn @click="contrato(props.item.id_contrato)"><v-icon>create</v-icon><span>contrato</span></v-btn></td>
+                                                    <!-- <td><v-btn @click="show(props.item)" flat icon><v-icon>delete</v-icon></v-btn></td> -->
                                                 </tr>
                                             </template>
                                         </v-data-table>
@@ -201,6 +202,7 @@ export default {
     methods: {
         getAllRequisicoes: function(uid){
             this.items = [];
+            this.requisicoes = [];
             this.$backend.getAllRequests((all_req) => {
                 if(all_req.length == 0){
                     this.noreq = false;
@@ -215,7 +217,7 @@ export default {
                             } else {
                                 if(imovel.idUsuario == Vue.prototype.$appName.id){
                                     this.$backend.getUsuarioById(req.idUsuario, (user) => {
-                                        console.log(user);
+                                        //console.log(user);
                                         if(user == null){
                                             //ERROR HANDLING
                                             return;
@@ -239,7 +241,8 @@ export default {
                                         titulo: imovel.titulo,
                                         data: req.data,
                                         status: (req.status == 1) ? 'checkcircle' : (req.status == 2) ? 'alarm' : 'error',
-                                        id_contrato: -1
+                                        id_contrato: -1,
+                                        stat: (req.status == 1) ? 'confirmado' : (req.status == 2) ? 'pendente' : 'cancelado',
                                     })
                                 }
                             }
@@ -250,7 +253,7 @@ export default {
         },
 
         salvaUser: function(req){
-            console.log(req);
+            //console.log(req);
             this.titulo = req.titulo;
             this.nome = req.user_nome;
             this.email = req.user_email;
@@ -262,22 +265,53 @@ export default {
             this.user_id = req.user_id;
         },
 
-        aceitar: function(req){
+        aceitar: function(){
+          console.log(this.req_id);
             remote.dialog.showMessageBox({type: 'warning', title:'Você tem certeza? ', message: 'Você tem certeza de que aceita essa requisição? Uma vez aceitada será gerado o contrato para o requerinte confirmar o pagamente e o aluguel!',
                                         buttons: ['Sim, eu tenho certeza.', 'Não! Eu não quero fazer isso!']}, (idx) => {
                                             if(idx==0){
-                                                this.sendNotification(req);
+                                              this.sendNotification(1);
+                                              this.$backend.changeRequestStatus(1, this.req_id, () => {
+                                                    this.$backend.getRequestById(this.req_id, (r) => {
+                                                      this.$backend.getImovelById(r.idImovel, (imovel) => {
+                                                        if(imovel == null) {
+                                                          return;
+                                                        } else {
+                                                          console.log(imovel);
+                                                          this.$backend.addContrato({
+                                                            status: 2,
+                                                            metodoPagamento: null,
+                                                            idUsuario: Vue.prototype.$appName.id,
+                                                            idImovel: r.idImovel,
+                                                            data: r.data,
+                                                            valor: imovel.valor
+                                                          }, (contrato) => {
+                                                            console.log('pacoca');
+                                                          })
+                                                        }
+                                                      })
+                                                    })
+                                                    this.getAllRequisicoes();
+                                              })
                                             }
                                         });
         },
 
-        recusar: function(req){
+        recusar: function(){
+          remote.dialog.showMessageBox({type: 'warning', title:'Você tem certeza? ', message: 'Você tem certeza de que aceita essa requisição? Uma vez aceitada será gerado o contrato para o requerinte confirmar o pagamente e o aluguel!',
+                                      buttons: ['Sim, eu tenho certeza.', 'Não! Eu não quero fazer isso!']}, (idx) => {
+                                          if(idx==0){
+                                              this.sendNotification(2);
+                                              this.$backend.changeRequestStatus(3, this.req_id, () => {
 
+                                              })
+                                          }
+                                      });
         },
 
-        sendNotification: function(){
+        sendNotification: function(i){
             this.$backend.addNotificacao({
-                conteudo: 'Requisição aceita!',
+                conteudo: (i==1)?'Requisição aceita!' : 'Requisição recusada',
                 data: this.entrada,
                 visualizado: false,
                 idUsuario: this.user_id

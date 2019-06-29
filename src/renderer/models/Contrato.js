@@ -5,7 +5,8 @@ module.exports = function(sequelize, Sequelize){
         status: Sequelize.ENUM('1', '2', '3'),
         metodoPagamento: Sequelize.ENUM('1', '2'),
         idUsuario: Sequelize.INTEGER,
-        idImovel: Sequelize.INTEGER
+        idImovel: Sequelize.INTEGER,
+        data: Sequelize.DATEONLY,
     },
     {
         indexes: [{fields: ['id']}]

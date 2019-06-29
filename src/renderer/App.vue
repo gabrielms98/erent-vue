@@ -248,7 +248,7 @@ import { setInterval } from 'timers';
         { icon: 'local_atm', text: 'Meus Alugados' },
         { icon: 'local_grocery_store', text: 'Meus Alugueis'},
         { divider: true },
-        { icon: 'create', text: 'Contratos'},
+        { icon: 'create', text: 'Contratos', to: '/Contratos'},
         { icon: 'notifications', text: 'Notificações'},
         { icon: 'person', text: 'Perfil' },
       ],
@@ -281,7 +281,7 @@ import { setInterval } from 'timers';
           } else {
             Vue.prototype.$appName = user;
 
-            console.log(user);
+            //console.log(user);
 
             this.checkNotf();
 
