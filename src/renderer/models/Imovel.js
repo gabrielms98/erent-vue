@@ -5,7 +5,7 @@ module.exports = function(sequelize, Sequelize){
         descricao: Sequelize.STRING,
         valor: Sequelize.INTEGER,
         imagens: Sequelize.STRING,
-        status: Sequelize.BOOLEAN,
+        status: Sequelize.BOOLEAN, //ocupado ou nao
         rua: Sequelize.STRING,
         numero: Sequelize.STRING,
         bairro: Sequelize.STRING,

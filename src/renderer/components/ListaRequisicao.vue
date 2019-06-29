@@ -3,8 +3,8 @@
         <v-container>
             <v-layout>
                 <v-flex xs30>
-                    <h1>Requisições recebidas</h1>
-                    <v-card color="#fafafa">
+                    <h1>Requisições recebidas<v-btn flat icon @click="show = !show"><v-icon>keyboard_arrow_down</v-icon></v-btn></h1>
+                    <v-card color="#fafafa" v-if="show">
                         <v-card-text v-if="noreq">
                             <v-flex xs20 v-for="req in requisicoes">
                                 <v-card >
@@ -16,7 +16,7 @@
                                     </v-flex>
                                     <v-flex xs3>
                                         <v-container fill-height>
-                                            <table>
+                                            <table class="table_req">
                                                 <tr>
                                                     <th>DATA DE ENTRADA</th>
                                                     <th>DATA DE SAIDA</th>
@@ -69,7 +69,7 @@
                                                         </v-flex>
                                                         <v-flex xs4>
                                                             <v-container fill-height>
-                                                                <table>
+                                                                <table class="table_req">
                                                                     <tr>
                                                                         <th>DATA DE ENTRADA</th>
                                                                         <th>DATA DE SAIDA</th>
@@ -115,7 +115,27 @@
                     <h1>Requisições feitas</h1>
                     <v-card color="#fafafa">
                         <v-card-text>
-
+                            <v-container>
+                                <v-layout row wrap>
+                                    <v-data-table
+                                    v-model="selected"
+                                    :headers="headers"
+                                    :items="items"
+                                    :pagination.sync="pagination"
+                                    item-key="id"
+                                    class="elevation-1"
+                                    rows-per-page-text="Linhas por página"
+                                    :rows-per-page-items="rowsppitems"
+                                    >
+                                        <template>
+                                            <tr>titulo</tr>
+                                            <tr>data</tr>
+                                            <tr>status</tr>
+                                            <tr><v-btn>contrato</v-btn></tr>
+                                        </template>
+                                    </v-data-table>
+                                </v-layout>
+                            </v-container>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -141,7 +161,33 @@ export default {
         cpf: '',
         req_id: '',
         user_id: '',
-        show: true
+        show: true,
+        noreq: false,
+        pagination: {
+            sortBy: "name"
+        },
+        rowsppitems: [10, 25, 50, { text: "Tudo", value: -1 }],
+        selected: [],
+        headers: [
+        {
+            text: "Titulo",
+            align: "left",
+            value: "name"
+        },
+        {
+            text: "Data Entrada",
+            value: "production_sys"
+        },
+        {
+            text: "Status",
+            value: "city"
+        },
+        {
+            text: "",
+            value: "actions"
+        }
+        ],
+        items: []
     }),
 
     mounted: function(){
@@ -237,7 +283,7 @@ export default {
 </script>
 
 <style >
-    table, th, td {
+    table.table_req{
         border: 1px solid black;
         border-collapse: collapse;
     }
