@@ -334,7 +334,7 @@ import { setInterval } from 'timers';
             all.forEach(notf => {
               if(notf.visualizado == 0){
                 this.n_notf++;
-                this.notification_list.push({
+                this.notification_list.unshift({
                   conteudo: notf.conteudo,
                 });
                 this.new_notification = true;

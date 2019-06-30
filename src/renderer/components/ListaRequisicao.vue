@@ -254,19 +254,21 @@ export default {
 
                } else {
                 all_req.forEach((req) => {
-                    this.$backend.getImovelById(req.idImovel, (imovel) => {
-                        if(imovel == null){
-                            return;
-                        } else {
-                            this.items.push({
-                                titulo: imovel.titulo,
-                                data: req.data,
-                                icon_status: (req.status == 1) ? 'checkcircle' : (req.status == 2) ? 'alarm' : 'error',
-                                id_contrato: -1,
-                                stat: (req.status == 1) ? 'confirmado' : (req.status == 2) ? 'pendente' : 'cancelado'
-                            })
-                        }
-                    })
+                    if(req.idUsuario == Vue.prototype.$appName.id){
+                        this.$backend.getImovelById(req.idImovel, (imovel) => {
+                            if(imovel == null){
+                                return;
+                            } else {
+                                this.items.push({
+                                    titulo: imovel.titulo,
+                                    data: req.data,
+                                    icon_status: (req.status == 1) ? 'checkcircle' : (req.status == 2) ? 'alarm' : 'error',
+                                    id_contrato: -1,
+                                    stat: (req.status == 1) ? 'confirmado' : (req.status == 2) ? 'pendente' : 'cancelado'
+                                })
+                            }
+                        })
+                    }
                 })
                }
            })

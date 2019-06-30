@@ -152,6 +152,17 @@ const backend = {
           .then(contrato => callback(contrato));
         },
 
+        getContratoById(cid, callback=null){
+          models.Contrato.findOne({where: {id: cid}})
+          .then(contrato => callback(contrato));
+        },
+
+        changeContratoStatus(cid, st, callback=null){
+          models.Contrato.update(
+            {status: st},
+            {where: {id: cid}}
+          ).then(() => callback());
+        },
 
         //=============REQUISICAO=============//
         addRequest(req, callback=null){
