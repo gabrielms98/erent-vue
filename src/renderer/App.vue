@@ -78,6 +78,10 @@
               </v-card>
             </v-menu>
           </v-badge>
+          &nbsp&nbsp&nbsp
+          <v-avatar size="50px">
+            <img :src="img" alt="">
+          </v-avatar>
         </div>
       </v-toolbar>
       <v-content>
@@ -257,7 +261,8 @@ import { setInterval } from 'timers';
       notification_list: [],
       color_notification: 'grey',
       n_notf: 0,
-      all_read: false
+      all_read: false,
+      img: ''
     }),
     props: {
       source: String
@@ -284,6 +289,7 @@ import { setInterval } from 'timers';
             //console.log(user);
 
             this.checkNotf();
+            this.changeImg();
 
             this.session = true;
             this.$router.push('/');
@@ -350,6 +356,11 @@ import { setInterval } from 'timers';
           });
         }
       },
+
+      changeImg: function(){
+        let imagem = Vue.prototype.$appName.selfie;
+        this.img = require('@/' + imagem);
+      }
     }
   }
 </script>

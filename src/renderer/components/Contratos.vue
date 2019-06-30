@@ -130,7 +130,7 @@ export default {
                   this.$backend.getNameUserById(contrato.idUsuario, (name) =>{
                     this.items.push({
                       titulo: imovel.titulo,
-                      data: all.data,
+                      data: contrato.data,
                       metodo_pagamento: (all.metodoPagamento == 1) ? 'Boleto' : 'Cartão',
                       locador: Vue.prototype.$appName.nome + " " + Vue.prototype.$appName.sobrenome,
                       locatario: name, 
