@@ -64,6 +64,10 @@ const backend = {
           .then(user => callback(user));
         },
 
+        getNameUserById(uid, callback=null){
+          models.Usuario.findOne({where: {id: uid}})
+          .then(user => callback(user.nome + " " + user.sobrenome));
+        },
         //=============IMOVEL=============//
         addImovel(imovel, callback=null){
           models.imovel.create({
@@ -92,6 +96,11 @@ const backend = {
 
         getImovelById(iid, callback=null){
           models.Imovel.findOne({where: {id: iid}})
+          .then(imovel => callback(imovel));
+        },
+
+        getAllImovelByUser(uid, callback=null){
+          models.Imovel.findAll({where: {idUsuario: uid}})
           .then(imovel => callback(imovel));
         },
 
@@ -127,8 +136,9 @@ const backend = {
             status: obj.status,
             metodoPagamento: obj.metodoPagamento,
             idUsuario: obj.idUsuario,
-            idImovel: obj.Imovel,
-            data: obj.data
+            idImovel: obj.idImovel,
+            data: obj.data,
+            valor: obj.valor
           }).then(contrato => callback(contrato));
         },
 
@@ -137,6 +147,10 @@ const backend = {
           .then(all_contrato => callback(all_contrato));
         },
 
+        getAllContratosByIdImovel(iid, callback=null){
+          models.Contrato.findAll({where: {idImovel: iid}})
+          .then(contrato => callback(contrato));
+        },
 
 
         //=============REQUISICAO=============//

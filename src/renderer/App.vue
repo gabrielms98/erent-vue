@@ -344,7 +344,9 @@ import { setInterval } from 'timers';
         if(this.all_read == true){
           this.$backend.markAllAsRead(Vue.prototype.$appName.id, () => {
             this.all_read = false;
-            this.home();
+            this.checkNotf();
+            this.notification_badge = false;
+            //this.home();
           });
         }
       },

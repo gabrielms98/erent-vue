@@ -20,9 +20,12 @@
                       <tr>
                           <td>{{props.item.titulo}}</td>
                           <td>{{props.item.data}}</td>
-                          <td><v-icon :title="props.item.stat">{{props.item.status}}</v-icon></td>
+                          <td>{{props.item.locador}}</td>
+                          <td>{{props.item.locatario}}</td>
+                          <td>{{props.item.metodo_pagamento}}</td>
+                          <td>{{props.item.valor}}</td>
                           <td><v-btn @click="contrato(props.item.id_contrato)"><v-icon>create</v-icon><span>contrato</span></v-btn></td>
-                          <!-- <td><v-btn @click="show(props.item)" flat icon><v-icon>delete</v-icon></v-btn></td> -->
+                          
                       </tr>
                   </template>
               </v-data-table>
@@ -79,6 +82,7 @@ export default {
 
   mounted: function(){
     this.getAllContratos();
+    this.getAllContratosDono();
   },
 
   methods: {
@@ -89,9 +93,52 @@ export default {
           return;
         }else{
           all_contratos.forEach(all => {
-            this.items.push({
-              titulo: all.titulo,
-              data: all.data
+            this.$backend.getImovelById(all.idImovel, (imovel) => {
+              if(imovel == null){
+                return;
+              } else {
+                this.$backend.getNameUserById(imovel.idUsuario, (name) =>{
+                  this.items.push({
+                    titulo: imovel.titulo,
+                    data: all.data,
+                    metodo_pagamento: (all.metodoPagamento == 1) ? 'Boleto' : 'Cartão',
+                    locador: name,
+                    locatario: Vue.prototype.$appName.nome + " " + Vue.prototype.$appName.sobrenome,
+                    valor: imovel.valor
+                  })
+                });
+
+
+              }
+            })
+          })
+        }
+      })
+    },
+
+    getAllContratosDono: function(){
+      this.$backend.getAllImovelByUser(Vue.prototype.$appName.id, (all) => {
+        if(all == null){
+          return;
+        } else {
+          all.forEach((imovel) => {
+            this.$backend.getAllContratosByIdImovel(imovel.id, (contratos) => {
+              if(contratos == null){
+                return;
+              } else {
+                contratos.forEach((contrato) => {
+                  this.$backend.getNameUserById(contrato.idUsuario, (name) =>{
+                    this.items.push({
+                      titulo: imovel.titulo,
+                      data: all.data,
+                      metodo_pagamento: (all.metodoPagamento == 1) ? 'Boleto' : 'Cartão',
+                      locador: Vue.prototype.$appName.nome + " " + Vue.prototype.$appName.sobrenome,
+                      locatario: name, 
+                      valor: imovel.valor
+                    })  
+                  });
+                })
+              }
             })
           })
         }

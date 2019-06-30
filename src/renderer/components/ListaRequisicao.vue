@@ -5,7 +5,7 @@
                 <v-flex xs30>
                     <h1>Requisições recebidas<v-btn flat icon @click="show = !show"><v-icon>keyboard_arrow_down</v-icon></v-btn></h1>
                     <v-card color="#fafafa" v-if="show">
-                        <v-card-text v-if="noreq">
+                        <v-card-text v-if="has_req">
                             <v-flex xs20 v-for="req in requisicoes">
                                 <v-card >
                                    <v-layout row wrap class="text-xs-center">
@@ -132,7 +132,7 @@
                                                 <tr>
                                                     <td>{{props.item.titulo}}</td>
                                                     <td>{{props.item.data}}</td>
-                                                    <td><v-icon :title="props.item.stat">{{props.item.status}}</v-icon></td>
+                                                    <td><v-icon flat icon :title="props.item.stat">{{props.item.icon_status}}</v-icon></td>
                                                     <td><v-btn @click="contrato(props.item.id_contrato)"><v-icon>create</v-icon><span>contrato</span></v-btn></td>
                                                     <!-- <td><v-btn @click="show(props.item)" flat icon><v-icon>delete</v-icon></v-btn></td> -->
                                                 </tr>
@@ -167,7 +167,7 @@ export default {
         req_id: '',
         user_id: '',
         show: true,
-        noreq: false,
+        has_req: false,
         pagination: {
             sortBy: "name"
         },
@@ -197,25 +197,29 @@ export default {
 
     mounted: function(){
         this.getAllRequisicoes(Vue.prototype.$appName.id);
+        this.getAllRequisicoesDone(Vue.prototype.$appName.id);
     },
 
     methods: {
         getAllRequisicoes: function(uid){
             this.items = [];
             this.requisicoes = [];
+            this.has_req = false;
             this.$backend.getAllRequests((all_req) => {
                 if(all_req.length == 0){
-                    this.noreq = false;
+                    this.has_req = false;
                     return;
                 } else {
-                    this.noreq = true;
+                    this.has_req = false;
                     all_req.forEach(req => {
-                        this.$backend.getImovelById(req.idImovel, (imovel) => {
+                        if(req.status == 2){
+                            this.$backend.getImovelById(req.idImovel, (imovel) => {
                             if(imovel == null){
                                 //ERROR HANDLING
                                 return;
                             } else {
                                 if(imovel.idUsuario == Vue.prototype.$appName.id){
+                                    this.has_req = true;
                                     this.$backend.getUsuarioById(req.idUsuario, (user) => {
                                         //console.log(user);
                                         if(user == null){
@@ -236,20 +240,36 @@ export default {
                                         }
                                     })
                                 }
-                                if(req.idUsuario == Vue.prototype.$appName.id){
-                                    this.items.push({
-                                        titulo: imovel.titulo,
-                                        data: req.data,
-                                        status: (req.status == 1) ? 'checkcircle' : (req.status == 2) ? 'alarm' : 'error',
-                                        id_contrato: -1,
-                                        stat: (req.status == 1) ? 'confirmado' : (req.status == 2) ? 'pendente' : 'cancelado',
-                                    })
-                                }
                             }
                         })
+                        }
                     });
                 }
             })
+        },
+
+        getAllRequisicoesDone: function(uid){
+           this.$backend.getAllRequests((all_req) => {
+               if(all_req == null){
+
+               } else {
+                all_req.forEach((req) => {
+                    this.$backend.getImovelById(req.idImovel, (imovel) => {
+                        if(imovel == null){
+                            return;
+                        } else {
+                            this.items.push({
+                                titulo: imovel.titulo,
+                                data: req.data,
+                                icon_status: (req.status == 1) ? 'checkcircle' : (req.status == 2) ? 'alarm' : 'error',
+                                id_contrato: -1,
+                                stat: (req.status == 1) ? 'confirmado' : (req.status == 2) ? 'pendente' : 'cancelado'
+                            })
+                        }
+                    })
+                })
+               }
+           })
         },
 
         salvaUser: function(req){
@@ -273,25 +293,30 @@ export default {
                                               this.sendNotification(1);
                                               this.$backend.changeRequestStatus(1, this.req_id, () => {
                                                     this.$backend.getRequestById(this.req_id, (r) => {
-                                                      this.$backend.getImovelById(r.idImovel, (imovel) => {
-                                                        if(imovel == null) {
-                                                          return;
-                                                        } else {
-                                                          console.log(imovel);
-                                                          this.$backend.addContrato({
-                                                            status: 2,
-                                                            metodoPagamento: null,
-                                                            idUsuario: Vue.prototype.$appName.id,
-                                                            idImovel: r.idImovel,
-                                                            data: r.data,
-                                                            valor: imovel.valor
-                                                          }, (contrato) => {
-                                                            console.log('pacoca');
-                                                          })
-                                                        }
-                                                      })
+                                                        console.log("OOOOOOOOOOOOOOOOOOOOOO");
+                                                        console.log(r.idImovel);
+                                                        this.$backend.getImovelById(r.idImovel, (imovel) => {
+                                                            if(imovel == null) {
+                                                            return;
+                                                            } else {
+                                                                console.log(imovel);
+                                                                this.$backend.addContrato({
+                                                                    status: 2,
+                                                                    metodoPagamento: null,
+                                                                    idUsuario: r.idUsuario,
+                                                                    idImovel: imovel.id,
+                                                                    data: r.data,
+                                                                    valor: imovel.valor
+                                                                }, (contrato) => {
+                                                                    console.log('pacoca');
+                                                                })
+                                                            }
+                                                        })
                                                     })
-                                                    this.getAllRequisicoes();
+                                                    this.getAllRequisicoes(Vue.prototype.$appName.id);
+                                                    this.getAllRequisicoesDone(Vue.prototype.$appName.id);
+                                                    this.dialog_req = false;
+
                                               })
                                             }
                                         });
@@ -301,10 +326,12 @@ export default {
           remote.dialog.showMessageBox({type: 'warning', title:'Você tem certeza? ', message: 'Você tem certeza de que aceita essa requisição? Uma vez aceitada será gerado o contrato para o requerinte confirmar o pagamente e o aluguel!',
                                       buttons: ['Sim, eu tenho certeza.', 'Não! Eu não quero fazer isso!']}, (idx) => {
                                           if(idx==0){
-                                              this.sendNotification(2);
-                                              this.$backend.changeRequestStatus(3, this.req_id, () => {
-
-                                              })
+                                            this.sendNotification(2);
+                                            this.$backend.changeRequestStatus(3, this.req_id, () => {
+                                                this.dialog_req = false;
+                                                this.getAllRequisicoes(Vue.prototype.$appName.id);
+                                                this.getAllRequisicoesDone(Vue.prototype.$appName.id);
+                                            })
                                           }
                                       });
         },
