@@ -18,4 +18,12 @@ npm run build
 ```
 ### To run the application
 
-- Create a mysql server on localhost, port: 5432, db: erent-bd, user: user-erent, pwd: engenharia1
+- You'll need a dotenv file with:
+    DATABASE_NAME=<db-name>
+    DATABASE_SCHEMA=<db-user>
+    DATABASE_PWD=<db-pwd>
+    DATABASE_URL=<url>
+    DATABASE_PORT=<port>
+    DATABASE_STORAGE='erentdb.db'
+
+change <...> with your directives to connect to you database server and put this .env on the root of the application
